@@ -5,6 +5,8 @@ public class GameController : MonoBehaviour
 {
 
 	public GameObject hazard;
+	public GameObject waterLeft;
+	public GameObject waterRight;
 	public Vector3 spawnValues;
 	public int hazardCount;
 	public float spawnWait;
@@ -21,6 +23,7 @@ public class GameController : MonoBehaviour
 
 	void Start()
 	{
+		AddWater();
 		gameOver = false;
 		restart = false;
 		restartText.text = "";
@@ -49,7 +52,7 @@ public class GameController : MonoBehaviour
 		{
 			for (int i = 0; i < hazardCount; i++)
 			{
-				Vector3 spawnPosition = new Vector3 (Random.Range (-spawnValues.x, spawnValues.x), spawnValues.y, 0.0f);
+				Vector3 spawnPosition = new Vector3 (Random.Range (-spawnValues.x + 0.35f, spawnValues.x - 0.35f), spawnValues.y, 0.0f);
 				Quaternion spawnRotation = new Quaternion (0.0f, 0.0f, 0.0f, 0.0f);
 				Instantiate(hazard, spawnPosition, spawnRotation);
 				yield return new WaitForSeconds(spawnWait);
@@ -73,6 +76,15 @@ public class GameController : MonoBehaviour
 	void UpdateScore()
 	{
 		scoreText.text = "Score: " + score;
+	}
+
+	private void AddWater()
+	{
+		Quaternion spawnRotation = new Quaternion (0.0f, 0.0f, 0.0f, 0.0f);
+		Vector3 lspawnPosition = new Vector3 (-3.0f, 1.64f, 0.0f);
+		Instantiate (waterLeft, lspawnPosition, spawnRotation);
+		Vector3 rspawnPosition = new Vector3 (3.0f, 1.64f, 0.0f);
+		Instantiate (waterRight, rspawnPosition, spawnRotation);
 	}
 
 	//Add score from other actions

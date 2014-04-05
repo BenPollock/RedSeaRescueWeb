@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
 		Vector2 movement = new Vector2 (moveHorizontal, moveVertical);
 		rigidbody2D.velocity = movement * speed;
 
-		rigidbody2D.transform.position = new Vector2 (Mathf.Clamp (rigidbody2D.transform.position.x, boundary.xMin, boundary.xMax), Mathf.Clamp (rigidbody2D.transform.position.y, boundary.yMin, boundary.yMax));
+		rigidbody2D.transform.position = new Vector2 (Mathf.Clamp (rigidbody2D.transform.position.x, boundary.xMin + 0.35f, boundary.xMax - 0.35f), Mathf.Clamp (rigidbody2D.transform.position.y, boundary.yMin, boundary.yMax));
 	
 	}
 
