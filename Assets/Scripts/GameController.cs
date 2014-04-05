@@ -16,10 +16,12 @@ public class GameController : MonoBehaviour
 	public float spawnWait;
 	public float startWait;
 	public float waveWait;
+	public int level;
 
 	public GUIText scoreText;
 	public GUIText restartText;
 	public GUIText gameOverText;
+	public GUIText levelText;
 
 	private bool gameOver;
 	private bool restart;
@@ -34,6 +36,7 @@ public class GameController : MonoBehaviour
 		restart = false;
 		restartText.text = "";
 		gameOverText.text = "";
+		levelText.text = "";
 		score = 0;
 		UpdateScore ();
 		StartCoroutine (SpawnWaves());
@@ -56,12 +59,13 @@ public class GameController : MonoBehaviour
 		yield return new WaitForSeconds (startWait);
 		while(!gameOver)
 		{
-			for (int i = 0; i < hazardCount; i++)
-			{
+			//Disabling Waves for now
+			//for (int i = 0; i < hazardCount; i++)
+			//{
 				Vector3 spawnPosition = new Vector3 (Random.Range (-spawnValues.x + waterDistance, spawnValues.x - waterDistance), spawnValues.y, 0.0f);
 				Quaternion spawnRotation = new Quaternion (0.0f, 0.0f, 0.0f, 0.0f);
 				Instantiate(hazard, spawnPosition, spawnRotation);
-
+			/*
 				Vector3 leftPosition = _waterLeft.transform.position;
 				leftPosition.x += 0.01f;
 				Vector3 rightPosition = _waterRight.transform.position;
@@ -70,10 +74,12 @@ public class GameController : MonoBehaviour
 				_waterRight.transform.position = rightPosition;
 				waterDistance += 0.01f;
 
+			*/
+
 				yield return new WaitForSeconds(spawnWait);
-			}
+			//}
 			//Successfully beat the level
-			yield return new WaitForSeconds(waveWait);
+			//yield return new WaitForSeconds(waveWait);
 		}
 		restartText.text = "Press R for Restart";
 		restart = true;
@@ -86,7 +92,30 @@ public class GameController : MonoBehaviour
 			yield return new WaitForSeconds (0.1f);
 			score += 100;
 			UpdateScore ();
+			if(score % 10000 == 0)
+			{
+				level++;
+				//increase water every other level
+				if(level % 2 == 0)
+				{
+					Vector3 leftPosition = _waterLeft.transform.position;
+					leftPosition.x += 0.1f;
+					Vector3 rightPosition = _waterRight.transform.position;
+					rightPosition.x -= 0.1f;
+					_waterLeft.transform.position = leftPosition;
+					_waterRight.transform.position = rightPosition;
+					waterDistance += 0.1f;
+				}
+				StartCoroutine(ShowLevelUpdate());
+			}
 		}
+	}
+
+	IEnumerator ShowLevelUpdate()
+	{
+		levelText.text = "Level " + level;
+		yield return new WaitForSeconds (1f);
+		levelText.text = "";
 	}
 
 	void UpdateScore()
