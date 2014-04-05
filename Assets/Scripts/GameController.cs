@@ -12,20 +12,40 @@ public class GameController : MonoBehaviour
 	public float waveWait;
 
 	public GUIText scoreText;
+	public GUIText restartText;
+	public GUIText gameOverText;
+
+	private bool gameOver;
+	private bool restart;
 	private int score;
 
 	void Start()
 	{
+		gameOver = false;
+		restart = false;
+		restartText.text = "";
+		gameOverText.text = "";
 		score = 0;
 		UpdateScore ();
 		StartCoroutine (SpawnWaves());
-		StartCoroutine (ScoreAdder ());
+		StartCoroutine (ScoreAdder());
+	}
+
+	void Update ()
+	{
+		if (restart) 
+		{
+			if (Input.GetKeyDown(KeyCode.R))
+			{
+				Application.LoadLevel (Application.loadedLevel);
+			}
+		}
 	}
 
 	IEnumerator SpawnWaves () //ienumerator for asynchronous
 	{
 		yield return new WaitForSeconds (startWait);
-		while(true)
+		while(!gameOver)
 		{
 			for (int i = 0; i < hazardCount; i++)
 			{
@@ -36,11 +56,13 @@ public class GameController : MonoBehaviour
 			}
 			yield return new WaitForSeconds(waveWait);
 		}
+		restartText.text = "Press R for Restart";
+		restart = true;
 	}
 
 	IEnumerator ScoreAdder ()
 	{
-		while (true) //TODO: change to as long as player still alive
+		while (!gameOver) //TODO: change to as long as player still alive
 		{
 			yield return new WaitForSeconds (0.1f);
 			score += 100;
@@ -58,6 +80,11 @@ public class GameController : MonoBehaviour
 	{
 		score += newScoreValue;
 		UpdateScore ();
+	}
+	public void GameOver()
+	{
+		gameOverText.text = "Game over!";
+		gameOver = true;
 	}
 
 }

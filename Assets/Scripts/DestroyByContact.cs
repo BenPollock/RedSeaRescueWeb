@@ -7,12 +7,12 @@ public class DestroyByContact : MonoBehaviour {
 
 	void Start()
 	{
-		//find the game controller object so we can modify the score
-		/*GameObject gameControllerObject = GameObject.FindWithTag ("GameController");
+		//find the game controller object
+		GameObject gameControllerObject = GameObject.FindWithTag ("GameController");
 		if (gameControllerObject != null) 
 		{
 			gameController = gameControllerObject.GetComponent<GameController>();
-		}*/
+		}
 	}
 
 	void OnTriggerEnter2D (Collider2D other)
@@ -21,7 +21,8 @@ public class DestroyByContact : MonoBehaviour {
 			return;
 		}
 		//	gameController.AddScore (1000000);
-			Destroy (other.gameObject); //destroy player, we'll fix this later
-			Destroy (gameObject);  //destroy itself
-		}
+		Destroy (other.gameObject); //destroy player, we'll fix this later
+		Destroy (gameObject);  //destroy itself
+		gameController.GameOver ();
+	}
 }
