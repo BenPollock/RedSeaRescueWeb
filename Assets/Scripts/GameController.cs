@@ -25,6 +25,8 @@ public class GameController : MonoBehaviour
 	private bool restart;
 	private int score;
 
+	public float waterDistance;
+
 	void Start()
 	{
 		AddWater();
@@ -42,10 +44,10 @@ public class GameController : MonoBehaviour
 	{
 		if (restart) 
 		{
-			if (Input.GetKeyDown(KeyCode.R))
-			{
-				Application.LoadLevel (Application.loadedLevel);
-			}
+			//if (Input.GetKeyDown(KeyCode.R))
+			//{
+				Application.LoadLevel ("splash");
+		//	}
 		}
 	}
 
@@ -56,7 +58,7 @@ public class GameController : MonoBehaviour
 		{
 			for (int i = 0; i < hazardCount; i++)
 			{
-				Vector3 spawnPosition = new Vector3 (Random.Range (-spawnValues.x + 0.35f, spawnValues.x - 0.35f), spawnValues.y, 0.0f);
+				Vector3 spawnPosition = new Vector3 (Random.Range (-spawnValues.x + waterDistance, spawnValues.x - waterDistance), spawnValues.y, 0.0f);
 				Quaternion spawnRotation = new Quaternion (0.0f, 0.0f, 0.0f, 0.0f);
 				Instantiate(hazard, spawnPosition, spawnRotation);
 
@@ -66,10 +68,11 @@ public class GameController : MonoBehaviour
 				rightPosition.x -= 0.01f;
 				_waterLeft.transform.position = leftPosition;
 				_waterRight.transform.position = rightPosition;
+				waterDistance += 0.01f;
 
 				yield return new WaitForSeconds(spawnWait);
 			}
-			//Successfully beat the level, increase water
+			//Successfully beat the level
 			yield return new WaitForSeconds(waveWait);
 		}
 		restartText.text = "Press R for Restart";
@@ -111,6 +114,12 @@ public class GameController : MonoBehaviour
 	{
 		gameOverText.text = "Game over!";
 		gameOver = true;
+	}
+	public float WaterDistance{
+		get
+		{
+			return waterDistance;
+		}
 	}
 
 }
