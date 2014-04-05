@@ -7,6 +7,10 @@ public class GameController : MonoBehaviour
 	public GameObject hazard;
 	public GameObject waterLeft;
 	public GameObject waterRight;
+
+	private GameObject _waterLeft;
+	private GameObject _waterRight;
+
 	public Vector3 spawnValues;
 	public int hazardCount;
 	public float spawnWait;
@@ -55,8 +59,17 @@ public class GameController : MonoBehaviour
 				Vector3 spawnPosition = new Vector3 (Random.Range (-spawnValues.x + 0.35f, spawnValues.x - 0.35f), spawnValues.y, 0.0f);
 				Quaternion spawnRotation = new Quaternion (0.0f, 0.0f, 0.0f, 0.0f);
 				Instantiate(hazard, spawnPosition, spawnRotation);
+
+				Vector3 leftPosition = _waterLeft.transform.position;
+				leftPosition.x += 0.01f;
+				Vector3 rightPosition = _waterRight.transform.position;
+				rightPosition.x -= 0.01f;
+				_waterLeft.transform.position = leftPosition;
+				_waterRight.transform.position = rightPosition;
+
 				yield return new WaitForSeconds(spawnWait);
 			}
+			//Successfully beat the level, increase water
 			yield return new WaitForSeconds(waveWait);
 		}
 		restartText.text = "Press R for Restart";
@@ -65,7 +78,7 @@ public class GameController : MonoBehaviour
 
 	IEnumerator ScoreAdder ()
 	{
-		while (!gameOver) //TODO: change to as long as player still alive
+		while (!gameOver)
 		{
 			yield return new WaitForSeconds (0.1f);
 			score += 100;
@@ -82,9 +95,10 @@ public class GameController : MonoBehaviour
 	{
 		Quaternion spawnRotation = new Quaternion (0.0f, 0.0f, 0.0f, 0.0f);
 		Vector3 lspawnPosition = new Vector3 (-3.0f, 1.64f, 0.0f);
-		Instantiate (waterLeft, lspawnPosition, spawnRotation);
+		_waterLeft = (GameObject) Instantiate (waterLeft, lspawnPosition, spawnRotation);
 		Vector3 rspawnPosition = new Vector3 (3.0f, 1.64f, 0.0f);
-		Instantiate (waterRight, rspawnPosition, spawnRotation);
+		_waterRight = (GameObject) Instantiate (waterRight, rspawnPosition, spawnRotation);
+		//waterRight.transform.position
 	}
 
 	//Add score from other actions
