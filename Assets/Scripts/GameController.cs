@@ -8,13 +8,15 @@ public class GameController : MonoBehaviour
 	public GameObject coral;
 	public GameObject waterLeft;
 	public GameObject waterRight;
+	public GameObject trench;
 
 	private GameObject _waterLeft;
 	private GameObject _waterRight;
 
 	public Vector3 spawnValues;
 	public int hazardCount;
-	public float spawnWait;
+	public float maxSpawnWait;
+	public float minSpawnWait;
 	public float startWait;
 	public float waveWait;
 	public int level;
@@ -63,15 +65,38 @@ public class GameController : MonoBehaviour
 			//Disabling Waves for now
 			//for (int i = 0; i < hazardCount; i++)
 			//
-				Vector3 spawnPosition = new Vector3 (Random.Range (-spawnValues.x + waterDistance, spawnValues.x - waterDistance), spawnValues.y, 0.0f);
-				Quaternion spawnRotation = new Quaternion (0.0f, 0.0f, 0.0f, 0.0f);
 
-				//Spawn either coral or boulder
-				if(Random.Range(0,2) == 1){
-					Instantiate(hazard, spawnPosition, spawnRotation);
+				//Spawn behind enemies
+				if(level >= 7){
 				}
-				else{
-					Instantiate(coral, spawnPosition, spawnRotation);
+				//Spawn fish enemies
+				else if(level >= 5){
+				}
+				//Spawn ocean trenches
+				else if(level >= 3){
+					Vector3 spawnPosition = new Vector3 (Random.Range (-spawnValues.x + waterDistance, spawnValues.x - waterDistance), spawnValues.y, 0.0f);
+					Quaternion spawnRotation = new Quaternion (0.0f, 0.0f, 0.0f, 0.0f);
+					int spawnRange = Random.Range(0,3);
+					if(spawnRange == 0){
+						Instantiate(hazard, spawnPosition, spawnRotation);
+					}else if (spawnRange == 1)
+						Instantiate (coral, spawnPosition, spawnRotation);
+					else
+						Instantiate(trench, spawnPosition, spawnRotation);
+
+			}
+				else
+				{
+					Vector3 spawnPosition = new Vector3 (Random.Range (-spawnValues.x + waterDistance, spawnValues.x - waterDistance), spawnValues.y, 0.0f);
+					Quaternion spawnRotation = new Quaternion (0.0f, 0.0f, 0.0f, 0.0f);
+
+					//Spawn either coral or boulder
+					if(Random.Range(0,2) == 1){
+						Instantiate(hazard, spawnPosition, spawnRotation);
+					}
+					else{
+						Instantiate(coral, spawnPosition, spawnRotation);
+					}
 				}
 			/*
 				Vector3 leftPosition = _waterLeft.transform.position;
@@ -84,7 +109,7 @@ public class GameController : MonoBehaviour
 
 			*/
 
-				yield return new WaitForSeconds(spawnWait);
+				yield return new WaitForSeconds(Random.Range (minSpawnWait, maxSpawnWait));
 			//}
 			//Successfully beat the level
 			//yield return new WaitForSeconds(waveWait);
@@ -100,7 +125,7 @@ public class GameController : MonoBehaviour
 			yield return new WaitForSeconds (0.1f);
 			score += 100;
 			UpdateScore ();
-			if(score % 10000 == 0)
+			if(score % 15000 == 0)
 			{
 				level++;
 				//increase water every other level
