@@ -93,10 +93,10 @@ public class GameController : MonoBehaviour
 					else{
 						spawnRange = Random.Range(0,2);
 						if(spawnRange == 0){
-							spawnPosition = new Vector3 (-2f, Random.Range (1.25f, 3f), 0.0f);
+							spawnPosition = new Vector3 (-2f, Random.Range (1.65f, 3f), 0.0f);
 							Instantiate(fishLeft, spawnPosition, spawnRotation);
 						}else{
-							spawnPosition = new Vector3 (2f, Random.Range (1.25f, 3f), 0.0f);
+							spawnPosition = new Vector3 (2f, Random.Range (1.65f, 3f), 0.0f);
 							Instantiate(fishRight, spawnPosition, spawnRotation);
 						}
 						mainAudio.PlayOneShot(splash, 1.0f);
