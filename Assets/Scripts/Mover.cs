@@ -4,20 +4,12 @@ using System.Collections;
 public class Mover : MonoBehaviour 
 {
 
-	public float speed;
+	public float horizontal_speed;
+	public float vertical_speed;
 
 	void Start()
 	{
-		rigidbody2D.velocity = new Vector2 (0.0f, speed);
+		rigidbody2D.velocity = new Vector2 (horizontal_speed, vertical_speed);
 	}
 
-	public float Speed 
-	{
-		get{
-			return speed;
-		}
-		set{
-			speed = value;
-		}
-	}
 }

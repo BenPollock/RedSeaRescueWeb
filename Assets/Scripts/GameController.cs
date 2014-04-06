@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[RequireComponent(typeof(AudioSource))]
 public class GameController : MonoBehaviour 
 {
 
@@ -9,6 +10,8 @@ public class GameController : MonoBehaviour
 	public GameObject waterLeft;
 	public GameObject waterRight;
 	public GameObject trench;
+	public GameObject fishLeft;
+	public GameObject fishRight;
 
 	private GameObject _waterLeft;
 	private GameObject _waterRight;
@@ -30,6 +33,9 @@ public class GameController : MonoBehaviour
 	private bool restart;
 	private int score;
 	private float speedAdder = 0f;
+
+	public AudioClip splash;
+	public AudioSource mainAudio;
 
 	public float waterDistance;
 
@@ -72,6 +78,30 @@ public class GameController : MonoBehaviour
 				}
 				//Spawn fish enemies
 				else if(level >= 5){
+					int spawnRange = Random.Range (0,4);
+					Vector3 spawnPosition = new Vector3 (Random.Range (-spawnValues.x + waterDistance, spawnValues.x - waterDistance), spawnValues.y, 0.0f);
+					Quaternion spawnRotation = new Quaternion (0.0f, 0.0f, 0.0f, 0.0f);
+					if(spawnRange == 0){
+						Instantiate(hazard, spawnPosition, spawnRotation);
+						
+					}else if (spawnRange == 1){
+						Instantiate (coral, spawnPosition, spawnRotation);
+					}
+					else if (spawnRange == 2){
+						Instantiate(trench, spawnPosition, spawnRotation);
+					}
+					else{
+						spawnRange = Random.Range(0,2);
+						if(spawnRange == 0){
+							spawnPosition = new Vector3 (-2f, Random.Range (1.25f, 3f), 0.0f);
+							Instantiate(fishLeft, spawnPosition, spawnRotation);
+						}else{
+							spawnPosition = new Vector3 (2f, Random.Range (1.25f, 3f), 0.0f);
+							Instantiate(fishRight, spawnPosition, spawnRotation);
+						}
+						mainAudio.PlayOneShot(splash, 1.0f);
+					}
+					
 				}
 				//Spawn ocean trenches
 				else if(level >= 3){
@@ -134,7 +164,7 @@ public class GameController : MonoBehaviour
 				level++;
 
 				//each level enemies spawn faster, to a limit
-				if(minSpawnWait > 0.1f)
+				if(minSpawnWait > 0.2f)
 					minSpawnWait -= 0.1f;
 				if(maxSpawnWait > 0.5f)
 					maxSpawnWait -= 0.1f;
