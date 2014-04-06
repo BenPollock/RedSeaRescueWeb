@@ -159,9 +159,9 @@ public class GameController : MonoBehaviour
 	private void AddWater()
 	{
 		Quaternion spawnRotation = new Quaternion (0.0f, 0.0f, 0.0f, 0.0f);
-		Vector3 lspawnPosition = new Vector3 (-3.0f, 1.64f, 0.0f);
+		Vector3 lspawnPosition = new Vector3 (-6.75f, 1.64f, 0.0f);
 		_waterLeft = (GameObject) Instantiate (waterLeft, lspawnPosition, spawnRotation);
-		Vector3 rspawnPosition = new Vector3 (3.0f, 1.64f, 0.0f);
+		Vector3 rspawnPosition = new Vector3 (6.75f, 1.64f, 0.0f);
 		_waterRight = (GameObject) Instantiate (waterRight, rspawnPosition, spawnRotation);
 		//waterRight.transform.position
 	}
