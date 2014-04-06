@@ -5,6 +5,7 @@ public class GameController : MonoBehaviour
 {
 
 	public GameObject hazard;
+	public GameObject coral;
 	public GameObject waterLeft;
 	public GameObject waterRight;
 
@@ -61,10 +62,17 @@ public class GameController : MonoBehaviour
 		{
 			//Disabling Waves for now
 			//for (int i = 0; i < hazardCount; i++)
-			//{
+			//
 				Vector3 spawnPosition = new Vector3 (Random.Range (-spawnValues.x + waterDistance, spawnValues.x - waterDistance), spawnValues.y, 0.0f);
 				Quaternion spawnRotation = new Quaternion (0.0f, 0.0f, 0.0f, 0.0f);
-				Instantiate(hazard, spawnPosition, spawnRotation);
+
+				//Spawn either coral or boulder
+				if(Random.Range(0,2) == 1){
+					Instantiate(hazard, spawnPosition, spawnRotation);
+				}
+				else{
+					Instantiate(coral, spawnPosition, spawnRotation);
+				}
 			/*
 				Vector3 leftPosition = _waterLeft.transform.position;
 				leftPosition.x += 0.01f;
