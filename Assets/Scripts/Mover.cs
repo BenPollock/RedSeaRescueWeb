@@ -11,4 +11,13 @@ public class Mover : MonoBehaviour
 		rigidbody2D.velocity = new Vector2 (0.0f, speed);
 	}
 
+	public float Speed 
+	{
+		get{
+			return speed;
+		}
+		set{
+			speed = value;
+		}
+	}
 }

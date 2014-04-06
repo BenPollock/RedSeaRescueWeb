@@ -29,6 +29,7 @@ public class GameController : MonoBehaviour
 	private bool gameOver;
 	private bool restart;
 	private int score;
+	private float speedAdder = 0f;
 
 	public float waterDistance;
 
@@ -79,10 +80,13 @@ public class GameController : MonoBehaviour
 					int spawnRange = Random.Range(0,3);
 					if(spawnRange == 0){
 						Instantiate(hazard, spawnPosition, spawnRotation);
-					}else if (spawnRange == 1)
+						
+					}else if (spawnRange == 1){
 						Instantiate (coral, spawnPosition, spawnRotation);
-					else
+					}
+					else{
 						Instantiate(trench, spawnPosition, spawnRotation);
+					}
 
 			}
 				else
@@ -128,8 +132,16 @@ public class GameController : MonoBehaviour
 			if(score % 15000 == 0)
 			{
 				level++;
-				//increase water every other level
-				if(level % 2 == 0)
+
+				//each level enemies spawn faster, to a limit
+				if(minSpawnWait > 0.1f)
+					minSpawnWait -= 0.1f;
+				if(maxSpawnWait > 0.5f)
+					maxSpawnWait -= 0.1f;
+				
+
+				//increase water every other level, to a limit
+				if(level % 2 == 0 && level < 10)
 				{
 					Vector3 leftPosition = _waterLeft.transform.position;
 					leftPosition.x += 0.1f;
@@ -138,6 +150,9 @@ public class GameController : MonoBehaviour
 					_waterLeft.transform.position = leftPosition;
 					_waterRight.transform.position = rightPosition;
 					waterDistance += 0.1f;
+				}else{
+				//Increase speed every other level
+					speedAdder += -1.0f;
 				}
 				StartCoroutine(ShowLevelUpdate());
 			}
