@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour
 		{
 			gameController = gameControllerObject.GetComponent<GameController>();
 		}
+	//	this.collider2D.isTrigger = false;
 	}
 
 	void FixedUpdate()

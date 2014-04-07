@@ -43,6 +43,9 @@ public class GameController : MonoBehaviour
 	public float waterDistance;
 	private int highscore = 0;
 
+	public Texture replay;
+	public Texture quit;
+
 	void Awake()
 	{
 		mainAudio = GameObject.Find ("Game Music");
@@ -110,10 +113,10 @@ public class GameController : MonoBehaviour
 					else{
 						spawnRange = Random.Range(0,2);
 						if(spawnRange == 0){
-							spawnPosition = new Vector3 (-2f, 3.5f, 0.0f);
+							spawnPosition = new Vector3 (-2f, 3.66f, 0.0f);
 							Instantiate(fishLeft, spawnPosition, spawnRotation);
 						}else{
-							spawnPosition = new Vector3 (2f, 3.5f, 0.0f);
+							spawnPosition = new Vector3 (2f, 3.66f, 0.0f);
 							Instantiate(fishRight, spawnPosition, spawnRotation);
 						}
 						mainAudio.audio.PlayOneShot(splash, 1.0f);
@@ -176,7 +179,7 @@ public class GameController : MonoBehaviour
 			yield return new WaitForSeconds (0.5f);
 			score += 1;
 			UpdateScore ();
-			if(score % 15 == 0)
+			if(score % 20 == 0)
 			{
 				level++;
 
@@ -209,7 +212,7 @@ public class GameController : MonoBehaviour
 	IEnumerator ShowLevelUpdate()
 	{
 		levelText.text = "Level " + level;
-		yield return new WaitForSeconds (2f);
+		yield return new WaitForSeconds (1.5f);
 		levelText.text = "";
 	}
 
@@ -253,7 +256,7 @@ public class GameController : MonoBehaviour
 
 		//Create game over popup
 		Quaternion spawnRotation = new Quaternion (0.0f, 0.0f, 0.0f, 0.0f);
-		Vector3 spawnPosition = new Vector3 (-0.02f, 1.51f, 0.0f);
+		Vector3 spawnPosition = new Vector3 (0f, 1.51f, 0.0f);
 		_gameOverBox = (GameObject)Instantiate (gameOverBox, spawnPosition, spawnRotation);
 
 
@@ -269,11 +272,11 @@ public class GameController : MonoBehaviour
 	void OnGUI(){
 		if (gameOver) {
 			//Button to play again
-			GUI.backgroundColor = Color.cyan;
-			if (GUI.Button (new Rect (100, Screen.height - (int)(Screen.height / 10) * 6, Screen.width - 200, (int)(Screen.height / 10)), "Replay")) {
+			GUI.backgroundColor = Color.clear;
+			if (GUI.Button (new Rect (100, Screen.height - (int)(Screen.height / 10) * 6, Screen.width - 200, (int)(Screen.height / 10)), replay)) {
 					Application.LoadLevel ("main");
 			}
-			if (GUI.Button (new Rect (100, Screen.height - (int)(Screen.height / 10) * 5, Screen.width - 200, (int)(Screen.height / 10)), "Quit")) {
+			if (GUI.Button (new Rect (100, Screen.height - (int)(Screen.height / 10) * 5, Screen.width - 200, (int)(Screen.height / 10)), quit)) {
 				Application.LoadLevel ("splash");
 			}
 		}
