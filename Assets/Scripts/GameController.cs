@@ -75,11 +75,8 @@ public class GameController : MonoBehaviour
 			//for (int i = 0; i < hazardCount; i++)
 			//
 
-				//Spawn behind enemies
-				if(level >= 7){
-				}
 				//Spawn fish enemies
-				else if(level >= 5){
+				if(level >= 5){
 					int spawnRange = Random.Range (0,4);
 					Vector3 spawnPosition = new Vector3 (Random.Range (-spawnValues.x + waterDistance, spawnValues.x - waterDistance), spawnValues.y, 0.0f);
 					Quaternion spawnRotation = new Quaternion (0.0f, 0.0f, 0.0f, 0.0f);
@@ -158,17 +155,17 @@ public class GameController : MonoBehaviour
 	{
 		while (!gameOver)
 		{
-			yield return new WaitForSeconds (0.1f);
-			score += 100;
+			yield return new WaitForSeconds (0.5f);
+			score += 1;
 			UpdateScore ();
-			if(score % 15000 == 0)
+			if(score % 15 == 0)
 			{
 				level++;
 
 				//each level enemies spawn faster, to a limit
-				if(minSpawnWait > 0.2f)
-					minSpawnWait -= 0.1f;
-				if(maxSpawnWait > 0.5f)
+				//if(minSpawnWait > 0.2f)
+			//		minSpawnWait -= 0.1f;
+				if(maxSpawnWait > 1f)
 					maxSpawnWait -= 0.1f;
 				
 
