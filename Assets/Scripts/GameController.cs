@@ -38,10 +38,15 @@ public class GameController : MonoBehaviour
 	private float speedAdder = 0f;
 
 	public AudioClip splash;
-	public AudioSource mainAudio;
+	private GameObject mainAudio;
 
 	public float waterDistance;
 	private int highscore = 0;
+
+	void Awake()
+	{
+		mainAudio = GameObject.Find ("Game Music");
+	}
 
 	void Start()
 	{
@@ -111,7 +116,7 @@ public class GameController : MonoBehaviour
 							spawnPosition = new Vector3 (2f, 3.5f, 0.0f);
 							Instantiate(fishRight, spawnPosition, spawnRotation);
 						}
-						mainAudio.PlayOneShot(splash, 1.0f);
+						mainAudio.audio.PlayOneShot(splash, 1.0f);
 					}
 					
 				}
