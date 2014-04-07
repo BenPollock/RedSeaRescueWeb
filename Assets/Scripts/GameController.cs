@@ -46,7 +46,9 @@ public class GameController : MonoBehaviour
 		restart = false;
 		restartText.text = "";
 		gameOverText.text = "";
+		scoreText.fontSize = (int) (Mathf.Min (Screen.width, Screen.height) / 20f);
 		levelText.text = "";
+		levelText.fontSize = (int) (Mathf.Min (Screen.width, Screen.height) / 10f);
 		score = 0;
 		UpdateScore ();
 		StartCoroutine (SpawnWaves());
@@ -93,10 +95,10 @@ public class GameController : MonoBehaviour
 					else{
 						spawnRange = Random.Range(0,2);
 						if(spawnRange == 0){
-							spawnPosition = new Vector3 (-2f, Random.Range (1.65f, 3f), 0.0f);
+							spawnPosition = new Vector3 (-2f, 3.5f, 0.0f);
 							Instantiate(fishLeft, spawnPosition, spawnRotation);
 						}else{
-							spawnPosition = new Vector3 (2f, Random.Range (1.65f, 3f), 0.0f);
+							spawnPosition = new Vector3 (2f, 3.5f, 0.0f);
 							Instantiate(fishRight, spawnPosition, spawnRotation);
 						}
 						mainAudio.PlayOneShot(splash, 1.0f);
@@ -192,7 +194,7 @@ public class GameController : MonoBehaviour
 	IEnumerator ShowLevelUpdate()
 	{
 		levelText.text = "Level " + level;
-		yield return new WaitForSeconds (1f);
+		yield return new WaitForSeconds (2f);
 		levelText.text = "";
 	}
 

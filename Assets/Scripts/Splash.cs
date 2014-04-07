@@ -16,7 +16,7 @@ public class Splash : MonoBehaviour {
 		int buttonHeight = 100;
 
 		GUI.backgroundColor = Color.clear;
-		if (GUI.Button (new Rect (Screen.width -300, Screen.height - 200, 250, 100), play))
+		if (GUI.Button (new Rect (100, Screen.height - (int)(Screen.height / 8) *2, Screen.width - 200, (int)(Screen.height / 8)), play))
 		{
 			Application.LoadLevel ("main");
 		}
