@@ -16,6 +16,9 @@ public class GameController : MonoBehaviour
 	private GameObject _waterLeft;
 	private GameObject _waterRight;
 
+	public GameObject gameOverBox;
+	private GameObject _gameOverBox;
+
 	public Vector3 spawnValues;
 	public int hazardCount;
 	public float maxSpawnWait;
@@ -38,21 +41,30 @@ public class GameController : MonoBehaviour
 	public AudioSource mainAudio;
 
 	public float waterDistance;
+	private int highscore = 0;
 
 	void Start()
 	{
 		AddWater();
 		gameOver = false;
 		restart = false;
-		restartText.text = "";
+		restartText.text = "Max: 0";
 		gameOverText.text = "";
 		scoreText.fontSize = (int) (Mathf.Min (Screen.width, Screen.height) / 20f);
+		restartText.fontSize = (int) (Mathf.Min (Screen.width, Screen.height) / 20f);
 		levelText.text = "";
 		levelText.fontSize = (int) (Mathf.Min (Screen.width, Screen.height) / 10f);
 		score = 0;
 		UpdateScore ();
 		StartCoroutine (SpawnWaves());
 		StartCoroutine (ScoreAdder());
+
+		//Get highscore
+		if (PlayerPrefs.HasKey ("Highscore")) {
+			highscore = PlayerPrefs.GetInt("Highscore");
+			restartText.text = "Max: " + highscore;
+		}
+
 	}
 
 	void Update ()
@@ -61,7 +73,8 @@ public class GameController : MonoBehaviour
 		{
 			//if (Input.GetKeyDown(KeyCode.R))
 			//{
-				Application.LoadLevel ("splash");
+			//Destroy (_gameOverBox);
+				//Application.LoadLevel ("splash");
 		//	}
 		}
 	}
@@ -147,7 +160,7 @@ public class GameController : MonoBehaviour
 			//Successfully beat the level
 			//yield return new WaitForSeconds(waveWait);
 		}
-		restartText.text = "Press R for Restart";
+		//restartText.text = "Press R for Restart";
 		restart = true;
 	}
 
@@ -203,9 +216,9 @@ public class GameController : MonoBehaviour
 	private void AddWater()
 	{
 		Quaternion spawnRotation = new Quaternion (0.0f, 0.0f, 0.0f, 0.0f);
-		Vector3 lspawnPosition = new Vector3 (-6.75f, 1.64f, 0.0f);
+		Vector3 lspawnPosition = new Vector3 (-6.65f, 1.64f, 0.0f);
 		_waterLeft = (GameObject) Instantiate (waterLeft, lspawnPosition, spawnRotation);
-		Vector3 rspawnPosition = new Vector3 (6.75f, 1.64f, 0.0f);
+		Vector3 rspawnPosition = new Vector3 (6.65f, 1.64f, 0.0f);
 		_waterRight = (GameObject) Instantiate (waterRight, rspawnPosition, spawnRotation);
 		//waterRight.transform.position
 	}
@@ -213,18 +226,51 @@ public class GameController : MonoBehaviour
 	//Add score from other actions
 	public void AddScore(int newScoreValue)
 	{
-		score += newScoreValue;
-		UpdateScore ();
+		if (!gameOver) {
+			score += newScoreValue;
+			UpdateScore ();
+		}
 	}
 	public void GameOver()
 	{
-		gameOverText.text = "Game over!";
+		//gameOverText.text = "Game over!";
 		gameOver = true;
+
+		//Set highscore
+		if (PlayerPrefs.HasKey ("Highscore")) {
+			highscore = PlayerPrefs.GetInt("Highscore");
+			if(highscore < score){
+				PlayerPrefs.SetInt ("Highscore", score);
+			}
+		}else{
+			PlayerPrefs.SetInt("Highscore", score);
+		}
+
+		//Create game over popup
+		Quaternion spawnRotation = new Quaternion (0.0f, 0.0f, 0.0f, 0.0f);
+		Vector3 spawnPosition = new Vector3 (-0.02f, 1.51f, 0.0f);
+		_gameOverBox = (GameObject)Instantiate (gameOverBox, spawnPosition, spawnRotation);
+
+
+
 	}
 	public float WaterDistance{
 		get
 		{
 			return waterDistance;
+		}
+	}
+
+	void OnGUI(){
+		if (gameOver) {
+			//Button to play again
+			GUI.backgroundColor = Color.cyan;
+			if (GUI.Button (new Rect (100, Screen.height - (int)(Screen.height / 10) * 6, Screen.width - 200, (int)(Screen.height / 10)), "Replay")) {
+					Application.LoadLevel ("main");
+			}
+			if (GUI.Button (new Rect (100, Screen.height - (int)(Screen.height / 10) * 5, Screen.width - 200, (int)(Screen.height / 10)), "Quit")) {
+				Application.LoadLevel ("splash");
+			}
 		}
 	}
 
