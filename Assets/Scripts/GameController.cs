@@ -69,6 +69,9 @@ public class GameController : MonoBehaviour
 		StartCoroutine (SpawnWaves());
 		StartCoroutine (ScoreAdder());
 
+		//Prevent phone from sleeping
+		Screen.sleepTimeout = SleepTimeout.NeverSleep;
+
 		//Get highscore
 		if (PlayerPrefs.HasKey ("Highscore")) {
 			highscore = PlayerPrefs.GetInt("Highscore");
