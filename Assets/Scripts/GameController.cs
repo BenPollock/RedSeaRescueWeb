@@ -62,8 +62,10 @@ public class GameController : MonoBehaviour
 		restartText.fontSize = (int) (Mathf.Min (Screen.width, Screen.height) / 20f);
 		levelText.text = "";
 		levelText.fontSize = (int) (Mathf.Min (Screen.width, Screen.height) / 10f);
+		gameOverText.fontSize = (int) (Mathf.Min (Screen.width, Screen.height) / 15f);
 		score = 0;
 		UpdateScore ();
+		StartCoroutine (ShowInstructions ());
 		StartCoroutine (SpawnWaves());
 		StartCoroutine (ScoreAdder());
 
@@ -87,6 +89,13 @@ public class GameController : MonoBehaviour
 		}
 	}
 
+	IEnumerator ShowInstructions()
+	{
+		gameOverText.text = "Tilt to Dodge";
+		yield return new WaitForSeconds(1.3f);
+		gameOverText.text = "";
+	}
+
 	IEnumerator SpawnWaves () //ienumerator for asynchronous
 	{
 		yield return new WaitForSeconds (startWait);
@@ -95,9 +104,50 @@ public class GameController : MonoBehaviour
 			//Disabling Waves for now
 			//for (int i = 0; i < hazardCount; i++)
 			//
-
+				//spawn fish and trenches at same time
+				if (level >= 10){
+					Vector3 spawnPosition = new Vector3 (Random.Range (-spawnValues.x + waterDistance, spawnValues.x - waterDistance), spawnValues.y, 0.0f);
+					Quaternion spawnRotation = new Quaternion (0.0f, 0.0f, 0.0f, 0.0f);
+					int spawnRange = Random.Range(0,2);
+					if(spawnRange == 0){
+						Instantiate(trench, spawnPosition, spawnRotation);
+						
+					}else if (spawnRange == 1){
+						spawnRange = Random.Range(0,2);
+						if(spawnRange == 0){
+							Instantiate(trench, spawnPosition, spawnRotation);
+							spawnPosition = new Vector3 (-2f, 3.66f, 0.0f);
+							Instantiate(fishLeft, spawnPosition, spawnRotation);
+						}else{
+							Instantiate(trench, spawnPosition, spawnRotation);
+							spawnPosition = new Vector3 (2f, 3.66f, 0.0f);
+							Instantiate(fishRight, spawnPosition, spawnRotation);
+						}
+						mainAudio.audio.PlayOneShot(splash, 1.0f);
+					}
+				}
+				//More fish and trenches
+				else if(level >= 7){
+					Vector3 spawnPosition = new Vector3 (Random.Range (-spawnValues.x + waterDistance, spawnValues.x - waterDistance), spawnValues.y, 0.0f);
+					Quaternion spawnRotation = new Quaternion (0.0f, 0.0f, 0.0f, 0.0f);
+					int spawnRange = Random.Range(0,2);
+					if(spawnRange == 0){
+						Instantiate(trench, spawnPosition, spawnRotation);
+					
+					}else if (spawnRange == 1){
+						spawnRange = Random.Range(0,2);
+						if(spawnRange == 0){
+							spawnPosition = new Vector3 (-2f, 3.66f, 0.0f);
+							Instantiate(fishLeft, spawnPosition, spawnRotation);
+						}else{
+							spawnPosition = new Vector3 (2f, 3.66f, 0.0f);
+							Instantiate(fishRight, spawnPosition, spawnRotation);
+						}
+						mainAudio.audio.PlayOneShot(splash, 1.0f);
+					}
+				}
 				//Spawn fish enemies
-				if(level >= 5){
+				else if(level >= 5){
 					int spawnRange = Random.Range (0,4);
 					Vector3 spawnPosition = new Vector3 (Random.Range (-spawnValues.x + waterDistance, spawnValues.x - waterDistance), spawnValues.y, 0.0f);
 					Quaternion spawnRotation = new Quaternion (0.0f, 0.0f, 0.0f, 0.0f);
@@ -179,14 +229,14 @@ public class GameController : MonoBehaviour
 			yield return new WaitForSeconds (0.5f);
 			score += 1;
 			UpdateScore ();
-			if(score % 20 == 0)
+			if(score % 15 == 0)
 			{
 				level++;
 
 				//each level enemies spawn faster, to a limit
 				//if(minSpawnWait > 0.2f)
 			//		minSpawnWait -= 0.1f;
-				if(maxSpawnWait > 1f)
+				if(maxSpawnWait > 1.3f)
 					maxSpawnWait -= 0.1f;
 				
 
