@@ -312,7 +312,6 @@ public class GameController : MonoBehaviour
 		Vector3 spawnPosition = new Vector3 (0f, 1.51f, 0.0f);
 		_gameOverBox = (GameObject)Instantiate (gameOverBox, spawnPosition, spawnRotation);
 
-		AdMobPlugin.ShowBannerView ();
 
 
 
@@ -330,11 +329,9 @@ public class GameController : MonoBehaviour
 			GUI.backgroundColor = Color.clear;
 			if (GUI.Button (new Rect (100, Screen.height - (int)(Screen.height / 10) * 6, Screen.width - 200, (int)(Screen.height / 10)), replay)) {
 				Application.LoadLevel ("main");
-				AdMobPlugin.HideBannerView();
 			}
 			if (GUI.Button (new Rect (100, Screen.height - (int)(Screen.height / 10) * 5, Screen.width - 200, (int)(Screen.height / 10)), quit)) {
 				Application.LoadLevel ("splash");
-				AdMobPlugin.HideBannerView();
 			}
 		}
 	}
