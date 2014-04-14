@@ -31,6 +31,8 @@ public class Splash : MonoBehaviour {
 			else
 				AudioListener.pause = true;
 		}
+
+	//	PlayerPrefs.SetInt("Goliath", 1);
 	}
 
 }

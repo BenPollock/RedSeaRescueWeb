@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using GooglePlayGames;
+using UnityEngine.SocialPlatforms;
 
 [RequireComponent(typeof(AudioSource))]
 public class GameController : MonoBehaviour 
@@ -46,6 +48,8 @@ public class GameController : MonoBehaviour
 	public Texture replay;
 	public Texture quit;
 
+	private bool goliathMode = false;
+
 	void Awake()
 	{
 		mainAudio = GameObject.Find ("Game Music");
@@ -65,6 +69,11 @@ public class GameController : MonoBehaviour
 		gameOverText.fontSize = (int) (Mathf.Min (Screen.width, Screen.height) / 15f);
 		score = 0;
 		UpdateScore ();
+
+		PlayGamesPlatform.DebugLogEnabled = true;
+		PlayGamesPlatform.Activate ();
+		Social.localUser.Authenticate (ProcessAuthentication);
+
 		StartCoroutine (ShowInstructions ());
 		StartCoroutine (SpawnWaves());
 		StartCoroutine (ScoreAdder());
@@ -77,6 +86,13 @@ public class GameController : MonoBehaviour
 			highscore = PlayerPrefs.GetInt("Highscore");
 			restartText.text = "Max: " + highscore;
 		}
+
+		//Goliath mode?
+	/*	if (PlayerPrefs.HasKey ("Goliath")) {
+			if(PlayerPrefs.GetInt ("Goliath") == 1)
+				goliathMode = true;
+		}*/
+
 
 	}
 
@@ -297,13 +313,13 @@ public class GameController : MonoBehaviour
 		//gameOverText.text = "Game over!";
 		gameOver = true;
 
-		//Set highscore
+		//Set highscore, if not goliath mode
 		if (PlayerPrefs.HasKey ("Highscore")) {
 			highscore = PlayerPrefs.GetInt("Highscore");
-			if(highscore < score){
+			if(highscore < score && !goliathMode){
 				PlayerPrefs.SetInt ("Highscore", score);
 			}
-		}else{
+		}else if (!goliathMode){
 			PlayerPrefs.SetInt("Highscore", score);
 		}
 
@@ -324,17 +340,29 @@ public class GameController : MonoBehaviour
 		}
 	}
 
+	void ProcessAuthentication(bool success){
+		if (success) {
+			Debug.Log ("Authentication success");
+		}else
+			Debug.LogError ("Was not success");
+	}
+
+
 	void OnGUI(){
 		if (gameOver) {
 			//Button to play again
 			GUI.backgroundColor = Color.clear;
 			if (GUI.Button (new Rect (100, Screen.height - (int)(Screen.height / 10) * 6, Screen.width - 200, (int)(Screen.height / 10)), replay)) {
-				Application.LoadLevel ("main");
-				AdMobPlugin.HideBannerView();
+			//	AdMobPlugin.HideBannerView();
+				Social.ShowLeaderboardUI();
+			//	Application.LoadLevel ("main");
+				//string urlString = "market://details?id=" + "com.BenPollock.RedSeaRescue";
+			//	Application.OpenURL(urlString);
+
 			}
 			if (GUI.Button (new Rect (100, Screen.height - (int)(Screen.height / 10) * 5, Screen.width - 200, (int)(Screen.height / 10)), quit)) {
-				Application.LoadLevel ("splash");
 				AdMobPlugin.HideBannerView();
+				Application.LoadLevel ("splash");
 			}
 		}
 	}

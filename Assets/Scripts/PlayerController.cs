@@ -23,7 +23,19 @@ public class PlayerController : MonoBehaviour
 		{
 			gameController = gameControllerObject.GetComponent<GameController>();
 		}
-	//	this.collider2D.isTrigger = false;
+
+
+		//Goliath mode?
+		/*if (PlayerPrefs.HasKey ("Goliath")) {
+			Debug.Log ("goliath is: " + PlayerPrefs.GetInt ("Goliath"));
+			if(PlayerPrefs.GetInt ("Goliath") == 1){
+				this.collider2D.isTrigger = false;
+				//this.rigidbody2D.angularDrag = 10000000f; //0.05
+			}else{
+				this.collider2D.isTrigger = true;
+			//	this.rigidbody2D.angularDrag = 0.05f;
+			}
+		}*/
 	}
 
 	void FixedUpdate()
