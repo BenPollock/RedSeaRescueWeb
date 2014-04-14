@@ -47,8 +47,12 @@ public class GameController : MonoBehaviour
 
 	public Texture replay;
 	public Texture quit;
+	public Texture leaderboard;
+	public Texture achievements;
 
 	private bool goliathMode = false;
+	private bool hasAuthenticated = false;
+	private bool socialHasFailed = false;
 
 	void Awake()
 	{
@@ -72,7 +76,6 @@ public class GameController : MonoBehaviour
 
 		PlayGamesPlatform.DebugLogEnabled = true;
 		PlayGamesPlatform.Activate ();
-		Social.localUser.Authenticate (ProcessAuthentication);
 
 		StartCoroutine (ShowInstructions ());
 		StartCoroutine (SpawnWaves());
@@ -343,19 +346,25 @@ public class GameController : MonoBehaviour
 	void ProcessAuthentication(bool success){
 		if (success) {
 			Debug.Log ("Authentication success");
-		}else
+			hasAuthenticated = true;
+			socialHasFailed = false;
+		}else{
 			Debug.LogError ("Was not success");
+			socialHasFailed = true;
+		}
 	}
 
 
 	void OnGUI(){
 		if (gameOver) {
+			if(!hasAuthenticated && !socialHasFailed)
+				Social.localUser.Authenticate (ProcessAuthentication);
 			//Button to play again
 			GUI.backgroundColor = Color.clear;
 			if (GUI.Button (new Rect (100, Screen.height - (int)(Screen.height / 10) * 6, Screen.width - 200, (int)(Screen.height / 10)), replay)) {
-			//	AdMobPlugin.HideBannerView();
-				Social.ShowLeaderboardUI();
-			//	Application.LoadLevel ("main");
+				//AdMobPlugin.HideBannerView();
+				//Social.ShowLeaderboardUI();
+				Application.LoadLevel ("main");
 				//string urlString = "market://details?id=" + "com.BenPollock.RedSeaRescue";
 			//	Application.OpenURL(urlString);
 
@@ -364,6 +373,16 @@ public class GameController : MonoBehaviour
 				AdMobPlugin.HideBannerView();
 				Application.LoadLevel ("splash");
 			}
+
+			if (GUI.Button (new Rect (25, Screen.height - (int)(Screen.height / 20) * 7, (int)(Screen.width /2) - 50, (int)(Screen.height / 10)), leaderboard)) {
+				Debug.Log ("press leaderboard");
+			}
+
+			if (GUI.Button (new Rect ((int)(Screen.width/2)+25, Screen.height - (int)(Screen.height / 20) * 7, (int)(Screen.width /2) - 50, (int)(Screen.height / 10)), achievements)) {
+				Debug.Log ("press leaderboard");
+			}
+
+			
 		}
 	}
 
